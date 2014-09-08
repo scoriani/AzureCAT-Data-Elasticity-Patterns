@@ -1,0 +1,129 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{96C1ECE8-288E-4961-B3FC-2BA72525E0AC}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C56CC756-955D-4167-9076-CEE8D5104176}"
+	ProjectSection(SolutionItems) = preProject
+		Adventure Works Data Elasticity Demo.docx = Adventure Works Data Elasticity Demo.docx
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.AdventureWorks", "Demo.AdventureWorks\Demo.AdventureWorks.csproj", "{A0A1C74D-A8A7-47F2-A826-EC3A8F0CC157}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.AdventureWorks.Test", "Demo.AdventureWorks.Test\Demo.AdventureWorks.Test.csproj", "{8D35B8ED-DB54-4B72-94A1-0A28175742C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.AdventureWorks.WorkerRole", "Demo.AdventureWorks.WorkerRole\Demo.AdventureWorks.WorkerRole.csproj", "{19863287-6504-4C55-ABEC-C961EFA4C77F}"
+EndProject
+Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "Demo.AdventureWorks.Azure", "Demo.AdventureWorks.Azure\Demo.AdventureWorks.Azure.ccproj", "{178A21F5-EE9E-4721-803B-8CA4ADD3DBBB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PowerShell", "PowerShell", "{8402D10C-548F-4DC2-B903-B2CCD1C9969F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DacPacs", "DacPacs", "{6ACE9BBA-EB38-49BC-8F25-DE421AE0DCAF}"
+	ProjectSection(SolutionItems) = preProject
+		DacPacs\AWMain.dacpac = DacPacs\AWMain.dacpac
+		DacPacs\AWMain.Deploy.azuredb.publish.xml = DacPacs\AWMain.Deploy.azuredb.publish.xml
+		DacPacs\AWRef.dacpac = DacPacs\AWRef.dacpac
+		DacPacs\AWRefSales.dacpac = DacPacs\AWRefSales.dacpac
+		DacPacs\AWSales.dacpac = DacPacs\AWSales.dacpac
+		DacPacs\AWSales.Deploy.azuredb.publish.xml = DacPacs\AWSales.Deploy.azuredb.publish.xml
+		DacPacs\AWSales.Sync.azuredb.publish.xml = DacPacs\AWSales.Sync.azuredb.publish.xml
+		DacPacs\DataElasticity.ConfigDB.dacpac = DacPacs\DataElasticity.ConfigDB.dacpac
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Azure", "Azure", "{6C60E008-4A81-4515-B64C-4A33C88B0B8E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{259C020E-A85A-4564-82F0-5DAF0B568E49}"
+	ProjectSection(SolutionItems) = preProject
+		Sql\CreateElasticityUsersASDB.sql = Sql\CreateElasticityUsersASDB.sql
+		Sql\CreateElasticityUsersLocal.sql = Sql\CreateElasticityUsersLocal.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestData", "TestData", "{DA0BA16C-3EC4-492B-9FA7-FFEAC0B1E4E6}"
+	ProjectSection(SolutionItems) = preProject
+		TestData\CurrencyRates.txt = TestData\CurrencyRates.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DemoQueries", "DemoQueries", "{78C54ECE-C756-4150-BF80-536E47546E5D}"
+	ProjectSection(SolutionItems) = preProject
+		Sql\DemoQueries\DumpConfigurationTestResults.sql = Sql\DemoQueries\DumpConfigurationTestResults.sql
+		Sql\DemoQueries\DumpCurrencyRates.sql = Sql\DemoQueries\DumpCurrencyRates.sql
+		Sql\DemoQueries\DumpPointerSalesOrders.sql = Sql\DemoQueries\DumpPointerSalesOrders.sql
+		Sql\DemoQueries\DumpSalesOrders.sql = Sql\DemoQueries\DumpSalesOrders.sql
+		Sql\DemoQueries\DumpSettings.sql = Sql\DemoQueries\DumpSettings.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Local", "Local", "{D5A82071-DAE2-41C0-89DA-01B71A47A5E7}"
+	ProjectSection(SolutionItems) = preProject
+		PowerShell\Local\_DeployAwMainDacPac.ps1 = PowerShell\Local\_DeployAwMainDacPac.ps1
+		PowerShell\Local\_DropDatabases.ps1 = PowerShell\Local\_DropDatabases.ps1
+		PowerShell\Local\CreateDataElasticityDemo.ps1 = PowerShell\Local\CreateDataElasticityDemo.ps1
+		PowerShell\Local\DropDataElasticityDemo.ps1 = PowerShell\Local\DropDataElasticityDemo.ps1
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Azure", "Azure", "{B5BE6657-8AF1-4E98-AD27-24408490CD91}"
+	ProjectSection(SolutionItems) = preProject
+		PowerShell\Azure\_DeployAwMainDacPac.ps1 = PowerShell\Azure\_DeployAwMainDacPac.ps1
+		PowerShell\Azure\_DropDatabases.ps1 = PowerShell\Azure\_DropDatabases.ps1
+		PowerShell\Azure\CreateDataElasticityDemo.ps1 = PowerShell\Azure\CreateDataElasticityDemo.ps1
+		PowerShell\Azure\DropDataElasticityDemo.ps1 = PowerShell\Azure\DropDataElasticityDemo.ps1
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{B767829B-4C9E-4284-891C-3DAA9869369C}"
+	ProjectSection(SolutionItems) = preProject
+		PowerShell\Common\_CreateDataElasticityDemoStorage.ps1 = PowerShell\Common\_CreateDataElasticityDemoStorage.ps1
+		PowerShell\Common\_DropDataElasticityDemoStorage.ps1 = PowerShell\Common\_DropDataElasticityDemoStorage.ps1
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "appConfig Copies", "appConfig Copies", "{877A97CD-6591-4101-A4E6-E46941E32591}"
+	ProjectSection(SolutionItems) = preProject
+		AppConfigCopies\TestProject_LocalDB_app.config = AppConfigCopies\TestProject_LocalDB_app.config
+		AppConfigCopies\WorkerRole_LocalDB_app.config = AppConfigCopies\WorkerRole_LocalDB_app.config
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A0A1C74D-A8A7-47F2-A826-EC3A8F0CC157}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0A1C74D-A8A7-47F2-A826-EC3A8F0CC157}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0A1C74D-A8A7-47F2-A826-EC3A8F0CC157}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0A1C74D-A8A7-47F2-A826-EC3A8F0CC157}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D35B8ED-DB54-4B72-94A1-0A28175742C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D35B8ED-DB54-4B72-94A1-0A28175742C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D35B8ED-DB54-4B72-94A1-0A28175742C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D35B8ED-DB54-4B72-94A1-0A28175742C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19863287-6504-4C55-ABEC-C961EFA4C77F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19863287-6504-4C55-ABEC-C961EFA4C77F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19863287-6504-4C55-ABEC-C961EFA4C77F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19863287-6504-4C55-ABEC-C961EFA4C77F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{178A21F5-EE9E-4721-803B-8CA4ADD3DBBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{178A21F5-EE9E-4721-803B-8CA4ADD3DBBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{178A21F5-EE9E-4721-803B-8CA4ADD3DBBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{178A21F5-EE9E-4721-803B-8CA4ADD3DBBB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{19863287-6504-4C55-ABEC-C961EFA4C77F} = {6C60E008-4A81-4515-B64C-4A33C88B0B8E}
+		{178A21F5-EE9E-4721-803B-8CA4ADD3DBBB} = {6C60E008-4A81-4515-B64C-4A33C88B0B8E}
+		{8402D10C-548F-4DC2-B903-B2CCD1C9969F} = {C56CC756-955D-4167-9076-CEE8D5104176}
+		{6ACE9BBA-EB38-49BC-8F25-DE421AE0DCAF} = {C56CC756-955D-4167-9076-CEE8D5104176}
+		{259C020E-A85A-4564-82F0-5DAF0B568E49} = {C56CC756-955D-4167-9076-CEE8D5104176}
+		{DA0BA16C-3EC4-492B-9FA7-FFEAC0B1E4E6} = {C56CC756-955D-4167-9076-CEE8D5104176}
+		{78C54ECE-C756-4150-BF80-536E47546E5D} = {259C020E-A85A-4564-82F0-5DAF0B568E49}
+		{D5A82071-DAE2-41C0-89DA-01B71A47A5E7} = {8402D10C-548F-4DC2-B903-B2CCD1C9969F}
+		{B5BE6657-8AF1-4E98-AD27-24408490CD91} = {8402D10C-548F-4DC2-B903-B2CCD1C9969F}
+		{B767829B-4C9E-4284-891C-3DAA9869369C} = {8402D10C-548F-4DC2-B903-B2CCD1C9969F}
+		{877A97CD-6591-4101-A4E6-E46941E32591} = {C56CC756-955D-4167-9076-CEE8D5104176}
+	EndGlobalSection
+EndGlobal

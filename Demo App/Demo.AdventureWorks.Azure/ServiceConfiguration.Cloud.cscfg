@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="Demo.AdventureWorks.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="3" osVersion="*" schemaVersion="2014-01.2.3">
+  <Role name="Demo.AdventureWorks.WorkerRole">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="ShouldUseAzureCache" value="false" />
+      <Setting name="RedisConnectionString" value="cachename.redis.cache.windows.net,allowAdmin=true,ssl=true,password=mypassword" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=http;AccountName=myAccountName;AccountKey=myAccountKey" />
+    </ConfigurationSettings>
+    <Certificates>
+    </Certificates>
+  </Role>
+</ServiceConfiguration>
