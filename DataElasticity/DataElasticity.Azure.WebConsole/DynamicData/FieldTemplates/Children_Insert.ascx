@@ -1,0 +1,1 @@
+<%@ Control Language="C#" CodeBehind="Children_Insert.ascx.cs" Inherits="Microsoft.AzureCat.Patterns.DataElasticity.Azure.WebConsole.DynamicData.FieldTemplates.Children_InsertField" %>

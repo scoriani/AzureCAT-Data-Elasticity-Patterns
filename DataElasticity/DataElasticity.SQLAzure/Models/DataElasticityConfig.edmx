@@ -1,0 +1,668 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="DataElasticityConfigModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Databases">
+          <Key>
+            <PropertyRef Name="DatabaseID" />
+          </Key>
+          <Property Name="DatabaseID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DatabaseName" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="ServerID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RangeShards">
+          <Key>
+            <PropertyRef Name="ShardID" />
+          </Key>
+          <Property Name="ShardID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ShardMapID" Type="int" Nullable="false" />
+          <Property Name="DatabaseID" Type="int" Nullable="false" />
+          <Property Name="RangeLowValue" Type="bigint" Nullable="false" />
+          <Property Name="RangeHighValue" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Servers">
+          <Key>
+            <PropertyRef Name="ServerID" />
+          </Key>
+          <Property Name="ServerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Location" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="ServerName" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="MaxShardsAllowed" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ServerToShardSets">
+          <Key>
+            <PropertyRef Name="ShardSetID" />
+            <PropertyRef Name="ServerID" />
+          </Key>
+          <Property Name="ShardSetID" Type="int" Nullable="false" />
+          <Property Name="ServerID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Settings">
+          <Key>
+            <PropertyRef Name="Version" />
+          </Key>
+          <Property Name="Version" Type="int" Nullable="false" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="ShardPrefix" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="AdminUserName" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="AdminUserPassword" Type="varbinary" MaxLength="128" Nullable="false" />
+          <Property Name="ShardUserName" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="ShardUserPassword" Type="varbinary" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ShardMaps">
+          <Key>
+            <PropertyRef Name="ShardMapID" />
+          </Key>
+          <Property Name="ShardMapID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Shards">
+          <Key>
+            <PropertyRef Name="ShardID" />
+          </Key>
+          <Property Name="ShardID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ShardSetID" Type="int" Nullable="false" />
+          <Property Name="DatabaseID" Type="int" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ShardSetConfigs">
+          <Key>
+            <PropertyRef Name="ShardSetConfigID" />
+          </Key>
+          <Property Name="ShardSetConfigID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ShardSetID" Type="int" Nullable="false" />
+          <Property Name="Version" Type="int" Nullable="false" />
+          <Property Name="TargetShardCount" Type="int" Nullable="false" />
+          <Property Name="MaxShardCount" Type="int" Nullable="false" />
+          <Property Name="MaxShardletsPerShard" Type="bigint" Nullable="false" />
+          <Property Name="MinShardSizeMB" Type="int" Nullable="false" />
+          <Property Name="MaxShardSizeMB" Type="int" Nullable="false" />
+          <Property Name="AllowDeployment" Type="bit" Nullable="false" />
+          <Property Name="ShardMapID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ShardSetConfigSettings">
+          <Key>
+            <PropertyRef Name="ShardSetConfigSettingID" />
+          </Key>
+          <Property Name="ShardSetConfigSettingID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ShardSetConfigID" Type="int" Nullable="false" />
+          <Property Name="SettingKey" Type="nvarchar" MaxLength="25" Nullable="false" />
+          <Property Name="SettingValue" Type="nvarchar" MaxLength="1000" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ShardSets">
+          <Key>
+            <PropertyRef Name="ShardSetID" />
+          </Key>
+          <Property Name="ShardSetID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="Description" Type="varchar(max)" />
+          <Property Name="CurrentShardMapID" Type="int" />
+        </EntityType>
+        <Association Name="FK_Databases_ToServers">
+          <End Role="Servers" Type="Self.Servers" Multiplicity="1" />
+          <End Role="Databases" Type="Self.Databases" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Servers">
+              <PropertyRef Name="ServerID" />
+            </Principal>
+            <Dependent Role="Databases">
+              <PropertyRef Name="ServerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RangeShard_Server">
+          <End Role="Databases" Type="Self.Databases" Multiplicity="1" />
+          <End Role="RangeShards" Type="Self.RangeShards" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Databases">
+              <PropertyRef Name="DatabaseID" />
+            </Principal>
+            <Dependent Role="RangeShards">
+              <PropertyRef Name="DatabaseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RangeShards_ShardMapID">
+          <End Role="ShardMaps" Type="Self.ShardMaps" Multiplicity="1" />
+          <End Role="RangeShards" Type="Self.RangeShards" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ShardMaps">
+              <PropertyRef Name="ShardMapID" />
+            </Principal>
+            <Dependent Role="RangeShards">
+              <PropertyRef Name="ShardMapID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ServerToShardSet_Server">
+          <End Role="Servers" Type="Self.Servers" Multiplicity="1" />
+          <End Role="ServerToShardSets" Type="Self.ServerToShardSets" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Servers">
+              <PropertyRef Name="ServerID" />
+            </Principal>
+            <Dependent Role="ServerToShardSets">
+              <PropertyRef Name="ServerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ServerToShardSet_ShardSet">
+          <End Role="ShardSets" Type="Self.ShardSets" Multiplicity="1" />
+          <End Role="ServerToShardSets" Type="Self.ServerToShardSets" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ShardSets">
+              <PropertyRef Name="ShardSetID" />
+            </Principal>
+            <Dependent Role="ServerToShardSets">
+              <PropertyRef Name="ShardSetID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Shard_Database">
+          <End Role="Databases" Type="Self.Databases" Multiplicity="1" />
+          <End Role="Shards" Type="Self.Shards" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Databases">
+              <PropertyRef Name="DatabaseID" />
+            </Principal>
+            <Dependent Role="Shards">
+              <PropertyRef Name="DatabaseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Shard_ShardSet">
+          <End Role="ShardSets" Type="Self.ShardSets" Multiplicity="1" />
+          <End Role="Shards" Type="Self.Shards" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ShardSets">
+              <PropertyRef Name="ShardSetID" />
+            </Principal>
+            <Dependent Role="Shards">
+              <PropertyRef Name="ShardSetID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShardSetConfig_ShardMap">
+          <End Role="ShardMaps" Type="Self.ShardMaps" Multiplicity="1" />
+          <End Role="ShardSetConfigs" Type="Self.ShardSetConfigs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ShardMaps">
+              <PropertyRef Name="ShardMapID" />
+            </Principal>
+            <Dependent Role="ShardSetConfigs">
+              <PropertyRef Name="ShardMapID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShardSetConfig_ShardSet">
+          <End Role="ShardSets" Type="Self.ShardSets" Multiplicity="1" />
+          <End Role="ShardSetConfigs" Type="Self.ShardSetConfigs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ShardSets">
+              <PropertyRef Name="ShardSetID" />
+            </Principal>
+            <Dependent Role="ShardSetConfigs">
+              <PropertyRef Name="ShardSetID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShardSetConfigSettings_TableConfigs">
+          <End Role="ShardSetConfigs" Type="Self.ShardSetConfigs" Multiplicity="1" />
+          <End Role="ShardSetConfigSettings" Type="Self.ShardSetConfigSettings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ShardSetConfigs">
+              <PropertyRef Name="ShardSetConfigID" />
+            </Principal>
+            <Dependent Role="ShardSetConfigSettings">
+              <PropertyRef Name="ShardSetConfigID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DataElasticityConfigModelStoreContainer">
+          <EntitySet Name="Databases" EntityType="Self.Databases" Schema="DataElasticity" store:Type="Tables" />
+          <EntitySet Name="RangeShards" EntityType="Self.RangeShards" Schema="DataElasticity" store:Type="Tables" />
+          <EntitySet Name="Servers" EntityType="Self.Servers" Schema="DataElasticity" store:Type="Tables" />
+          <EntitySet Name="ServerToShardSets" EntityType="Self.ServerToShardSets" Schema="DataElasticity" store:Type="Tables" />
+          <EntitySet Name="Settings" EntityType="Self.Settings" Schema="DataElasticity" store:Type="Tables" />
+          <EntitySet Name="ShardMaps" EntityType="Self.ShardMaps" Schema="DataElasticity" store:Type="Tables" />
+          <EntitySet Name="Shards" EntityType="Self.Shards" Schema="DataElasticity" store:Type="Tables" />
+          <EntitySet Name="ShardSetConfigs" EntityType="Self.ShardSetConfigs" Schema="DataElasticity" store:Type="Tables" />
+          <EntitySet Name="ShardSetConfigSettings" EntityType="Self.ShardSetConfigSettings" Schema="DataElasticity" store:Type="Tables" />
+          <EntitySet Name="ShardSets" EntityType="Self.ShardSets" Schema="DataElasticity" store:Type="Tables" />
+          <AssociationSet Name="FK_Databases_ToServers" Association="Self.FK_Databases_ToServers">
+            <End Role="Servers" EntitySet="Servers" />
+            <End Role="Databases" EntitySet="Databases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RangeShard_Server" Association="Self.FK_RangeShard_Server">
+            <End Role="Databases" EntitySet="Databases" />
+            <End Role="RangeShards" EntitySet="RangeShards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RangeShards_ShardMapID" Association="Self.FK_RangeShards_ShardMapID">
+            <End Role="ShardMaps" EntitySet="ShardMaps" />
+            <End Role="RangeShards" EntitySet="RangeShards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ServerToShardSet_Server" Association="Self.FK_ServerToShardSet_Server">
+            <End Role="Servers" EntitySet="Servers" />
+            <End Role="ServerToShardSets" EntitySet="ServerToShardSets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ServerToShardSet_ShardSet" Association="Self.FK_ServerToShardSet_ShardSet">
+            <End Role="ShardSets" EntitySet="ShardSets" />
+            <End Role="ServerToShardSets" EntitySet="ServerToShardSets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Shard_Database" Association="Self.FK_Shard_Database">
+            <End Role="Databases" EntitySet="Databases" />
+            <End Role="Shards" EntitySet="Shards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Shard_ShardSet" Association="Self.FK_Shard_ShardSet">
+            <End Role="ShardSets" EntitySet="ShardSets" />
+            <End Role="Shards" EntitySet="Shards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShardSetConfig_ShardMap" Association="Self.FK_ShardSetConfig_ShardMap">
+            <End Role="ShardMaps" EntitySet="ShardMaps" />
+            <End Role="ShardSetConfigs" EntitySet="ShardSetConfigs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShardSetConfig_ShardSet" Association="Self.FK_ShardSetConfig_ShardSet">
+            <End Role="ShardSets" EntitySet="ShardSets" />
+            <End Role="ShardSetConfigs" EntitySet="ShardSetConfigs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShardSetConfigSettings_TableConfigs" Association="Self.FK_ShardSetConfigSettings_TableConfigs">
+            <End Role="ShardSetConfigs" EntitySet="ShardSetConfigs" />
+            <End Role="ShardSetConfigSettings" EntitySet="ShardSetConfigSettings" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DataElasticityModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="DataElasticityEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Databases" EntityType="DataElasticityModel.Database" />
+          <EntitySet Name="Servers" EntityType="DataElasticityModel.Server" />
+          <EntitySet Name="Settings" EntityType="DataElasticityModel.Setting" />
+          <EntitySet Name="ShardMaps" EntityType="DataElasticityModel.ShardMap" />
+          <EntitySet Name="ShardSetConfigs" EntityType="DataElasticityModel.ShardSetConfig" />
+          <EntitySet Name="ShardSetConfigSettings" EntityType="DataElasticityModel.ShardSetConfigSetting" />
+          <EntitySet Name="ShardSets" EntityType="DataElasticityModel.ShardSet" />
+          <AssociationSet Name="FK_Databases_ToServers" Association="DataElasticityModel.FK_Databases_ToServers">
+            <End Role="Servers" EntitySet="Servers" />
+            <End Role="Databases" EntitySet="Databases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShardSetConfig_ShardMap" Association="DataElasticityModel.FK_ShardSetConfig_ShardMap">
+            <End Role="ShardMaps" EntitySet="ShardMaps" />
+            <End Role="ShardSetConfigs" EntitySet="ShardSetConfigs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShardSetConfig_WorkloadGroup" Association="DataElasticityModel.FK_ShardSetConfig_WorkloadGroup">
+            <End Role="ShardSets" EntitySet="ShardSets" />
+            <End Role="ShardSetConfigs" EntitySet="ShardSetConfigs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShardSetConfigSettings_WorkloadGroupConfigs" Association="DataElasticityModel.FK_ShardSetConfigSettings_WorkloadGroupConfigs">
+            <End Role="ShardSetConfigs" EntitySet="ShardSetConfigs" />
+            <End Role="ShardSetConfigSettings" EntitySet="ShardSetConfigSettings" />
+          </AssociationSet>
+          <AssociationSet Name="ServerToShardSets" Association="DataElasticityModel.ServerToShardSets">
+            <End Role="Servers" EntitySet="Servers" />
+            <End Role="ShardSets" EntitySet="ShardSets" />
+          </AssociationSet>
+          <EntitySet Name="RangeShards" EntityType="DataElasticityModel.RangeShard" />
+          <AssociationSet Name="FK_Shard_Server1" Association="DataElasticityModel.FK_Shard_Server1">
+            <End Role="Database" EntitySet="Databases" />
+            <End Role="RangeShard" EntitySet="RangeShards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Shards_ShardMapID1" Association="DataElasticityModel.FK_Shards_ShardMapID1">
+            <End Role="ShardMap" EntitySet="ShardMaps" />
+            <End Role="RangeShard" EntitySet="RangeShards" />
+          </AssociationSet>
+          <EntitySet Name="Shards" EntityType="DataElasticityModel.Shard" />
+          <AssociationSet Name="FK_Shard_Database" Association="DataElasticityModel.FK_Shard_Database">
+            <End Role="Database" EntitySet="Databases" />
+            <End Role="Shard" EntitySet="Shards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Shard_ShardSet" Association="DataElasticityModel.FK_Shard_ShardSet">
+            <End Role="ShardSet" EntitySet="ShardSets" />
+            <End Role="Shard" EntitySet="Shards" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Database">
+          <Key>
+            <PropertyRef Name="DatabaseID" />
+          </Key>
+          <Property Name="DatabaseID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="DatabaseName" Type="String" Nullable="false" MaxLength="128" Unicode="false" FixedLength="false" />
+          <Property Name="ServerID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Server" Relationship="DataElasticityModel.FK_Databases_ToServers" FromRole="Databases" ToRole="Servers" />
+          <NavigationProperty Name="RangeShards" Relationship="DataElasticityModel.FK_Shard_Server1" FromRole="Database" ToRole="RangeShard" />
+          <NavigationProperty Name="Shards" Relationship="DataElasticityModel.FK_Shard_Database" FromRole="Database" ToRole="Shard" />
+        </EntityType>
+        <EntityType Name="Server">
+          <Key>
+            <PropertyRef Name="ServerID" />
+          </Key>
+          <Property Name="ServerID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Location" Type="String" Nullable="false" MaxLength="128" Unicode="false" FixedLength="false" />
+          <Property Name="ServerName" Type="String" Nullable="false" MaxLength="128" Unicode="false" FixedLength="false" />
+          <Property Name="MaxShardsAllowed" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Databases" Relationship="DataElasticityModel.FK_Databases_ToServers" FromRole="Servers" ToRole="Databases" />
+          <NavigationProperty Name="ShardSets" Relationship="DataElasticityModel.ServerToShardSets" FromRole="Servers" ToRole="ShardSets" />
+        </EntityType>
+        <EntityType Name="Setting">
+          <Key>
+            <PropertyRef Name="Version" />
+          </Key>
+          <Property Name="Version" Type="Int32" Nullable="false" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ShardPrefix" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="AdminUserName" Type="String" Nullable="false" MaxLength="15" Unicode="false" FixedLength="false" />
+          <Property Name="AdminUserPassword" Type="Binary" Nullable="false" MaxLength="128" FixedLength="false" />
+          <Property Name="ShardUserName" Type="String" Nullable="false" MaxLength="15" Unicode="false" FixedLength="false" />
+          <Property Name="ShardUserPassword" Type="Binary" Nullable="false" MaxLength="128" FixedLength="false" />
+          </EntityType>
+        <EntityType Name="ShardMap">
+          <Key>
+            <PropertyRef Name="ShardMapID" />
+          </Key>
+          <Property Name="ShardMapID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="ShardSetConfigs" Relationship="DataElasticityModel.FK_ShardSetConfig_ShardMap" FromRole="ShardMaps" ToRole="ShardSetConfigs" />
+          <NavigationProperty Name="RangeShards" Relationship="DataElasticityModel.FK_Shards_ShardMapID1" FromRole="ShardMap" ToRole="RangeShard" />
+        </EntityType>
+        <EntityType Name="ShardSetConfig">
+          <Key>
+            <PropertyRef Name="ShardSetConfigID" />
+          </Key>
+          <Property Name="ShardSetConfigID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="ShardSetID" Type="Int32" Nullable="false" />
+          <Property Name="Version" Type="Int32" Nullable="false" />
+          <Property Name="TargetShardCount" Type="Int32" Nullable="false" />
+          <Property Name="MaxShardCount" Type="Int32" Nullable="false" />
+          <Property Name="MaxShardletsPerShard" Type="Int64" Nullable="false" />
+          <Property Name="MinShardSizeMB" Type="Int32" Nullable="false" />
+          <Property Name="MaxShardSizeMB" Type="Int32" Nullable="false" />
+          <Property Name="AllowDeployment" Type="Boolean" Nullable="false" />
+          <Property Name="ShardMapID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ShardMap" Relationship="DataElasticityModel.FK_ShardSetConfig_ShardMap" FromRole="ShardSetConfigs" ToRole="ShardMaps" />
+          <NavigationProperty Name="ShardSet" Relationship="DataElasticityModel.FK_ShardSetConfig_WorkloadGroup" FromRole="ShardSetConfigs" ToRole="ShardSets" />
+          <NavigationProperty Name="ShardSetConfigSettings" Relationship="DataElasticityModel.FK_ShardSetConfigSettings_WorkloadGroupConfigs" FromRole="ShardSetConfigs" ToRole="ShardSetConfigSettings" />
+        </EntityType>
+        <EntityType Name="ShardSetConfigSetting">
+          <Key>
+            <PropertyRef Name="ShardSetConfigSettingID" />
+          </Key>
+          <Property Name="ShardSetConfigSettingID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="ShardSetConfigID" Type="Int32" Nullable="false" />
+          <Property Name="SettingKey" Type="String" Nullable="false" MaxLength="25" Unicode="true" FixedLength="false" />
+          <Property Name="SettingValue" Type="String" Nullable="false" MaxLength="1000" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="ShardSetConfig" Relationship="DataElasticityModel.FK_ShardSetConfigSettings_WorkloadGroupConfigs" FromRole="ShardSetConfigSettings" ToRole="ShardSetConfigs" />
+        </EntityType>
+        <EntityType Name="ShardSet">
+          <Key>
+            <PropertyRef Name="ShardSetID" />
+          </Key>
+          <Property Name="ShardSetID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="128" Unicode="false" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="CurrentShardMapID" Type="Int32" />
+          <NavigationProperty Name="ShardSetConfigs" Relationship="DataElasticityModel.FK_ShardSetConfig_WorkloadGroup" FromRole="ShardSets" ToRole="ShardSetConfigs" />
+          <NavigationProperty Name="Servers" Relationship="DataElasticityModel.ServerToShardSets" FromRole="ShardSets" ToRole="Servers" />
+          <NavigationProperty Name="Shards" Relationship="DataElasticityModel.FK_Shard_ShardSet" FromRole="ShardSet" ToRole="Shard" />
+        </EntityType>
+        <Association Name="FK_Databases_ToServers">
+          <End Role="Servers" Type="DataElasticityModel.Server" Multiplicity="1" />
+          <End Role="Databases" Type="DataElasticityModel.Database" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Servers">
+              <PropertyRef Name="ServerID" />
+            </Principal>
+            <Dependent Role="Databases">
+              <PropertyRef Name="ServerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShardSetConfig_ShardMap">
+          <End Role="ShardMaps" Type="DataElasticityModel.ShardMap" Multiplicity="1" />
+          <End Role="ShardSetConfigs" Type="DataElasticityModel.ShardSetConfig" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ShardMaps">
+              <PropertyRef Name="ShardMapID" />
+            </Principal>
+            <Dependent Role="ShardSetConfigs">
+              <PropertyRef Name="ShardMapID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShardSetConfig_WorkloadGroup">
+          <End Role="ShardSets" Type="DataElasticityModel.ShardSet" Multiplicity="1" />
+          <End Role="ShardSetConfigs" Type="DataElasticityModel.ShardSetConfig" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ShardSets">
+              <PropertyRef Name="ShardSetID" />
+            </Principal>
+            <Dependent Role="ShardSetConfigs">
+              <PropertyRef Name="ShardSetID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShardSetConfigSettings_WorkloadGroupConfigs">
+          <End Role="ShardSetConfigs" Type="DataElasticityModel.ShardSetConfig" Multiplicity="1" />
+          <End Role="ShardSetConfigSettings" Type="DataElasticityModel.ShardSetConfigSetting" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ShardSetConfigs">
+              <PropertyRef Name="ShardSetConfigID" />
+            </Principal>
+            <Dependent Role="ShardSetConfigSettings">
+              <PropertyRef Name="ShardSetConfigID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ServerToShardSets">
+          <End Role="Servers" Type="DataElasticityModel.Server" Multiplicity="*" />
+          <End Role="ShardSets" Type="DataElasticityModel.ShardSet" Multiplicity="*" />
+        </Association>
+        <EntityType Name="RangeShard">
+          <Key>
+            <PropertyRef Name="ShardID" />
+          </Key>
+          <Property Name="ShardID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShardMapID" Type="Int32" Nullable="false" />
+          <Property Name="DatabaseID" Type="Int32" Nullable="false" />
+          <Property Name="RangeLowValue" Type="Int64" Nullable="false" />
+          <Property Name="RangeHighValue" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Database" Relationship="DataElasticityModel.FK_Shard_Server1" FromRole="RangeShard" ToRole="Database" />
+          <NavigationProperty Name="ShardMap" Relationship="DataElasticityModel.FK_Shards_ShardMapID1" FromRole="RangeShard" ToRole="ShardMap" />
+        </EntityType>
+        <Association Name="FK_Shard_Server1">
+          <End Type="DataElasticityModel.Database" Role="Database" Multiplicity="1" />
+          <End Type="DataElasticityModel.RangeShard" Role="RangeShard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Database">
+              <PropertyRef Name="DatabaseID" />
+            </Principal>
+            <Dependent Role="RangeShard">
+              <PropertyRef Name="DatabaseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Shards_ShardMapID1">
+          <End Type="DataElasticityModel.ShardMap" Role="ShardMap" Multiplicity="1" />
+          <End Type="DataElasticityModel.RangeShard" Role="RangeShard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ShardMap">
+              <PropertyRef Name="ShardMapID" />
+            </Principal>
+            <Dependent Role="RangeShard">
+              <PropertyRef Name="ShardMapID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Shard">
+          <Key>
+            <PropertyRef Name="ShardID" />
+          </Key>
+          <Property Name="ShardID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShardSetID" Type="Int32" Nullable="false" />
+          <Property Name="DatabaseID" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Database" Relationship="DataElasticityModel.FK_Shard_Database" FromRole="Shard" ToRole="Database" />
+          <NavigationProperty Name="ShardSet" Relationship="DataElasticityModel.FK_Shard_ShardSet" FromRole="Shard" ToRole="ShardSet" />
+        </EntityType>
+        <Association Name="FK_Shard_Database">
+          <End Type="DataElasticityModel.Database" Role="Database" Multiplicity="1" />
+          <End Type="DataElasticityModel.Shard" Role="Shard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Database">
+              <PropertyRef Name="DatabaseID" />
+            </Principal>
+            <Dependent Role="Shard">
+              <PropertyRef Name="DatabaseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Shard_ShardSet">
+          <End Type="DataElasticityModel.ShardSet" Role="ShardSet" Multiplicity="1" />
+          <End Type="DataElasticityModel.Shard" Role="Shard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ShardSet">
+              <PropertyRef Name="ShardSetID" />
+            </Principal>
+            <Dependent Role="Shard">
+              <PropertyRef Name="ShardSetID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DataElasticityConfigModelStoreContainer" CdmEntityContainer="DataElasticityEntities">
+          <EntitySetMapping Name="Databases">
+            <EntityTypeMapping TypeName="DataElasticityModel.Database">
+              <MappingFragment StoreEntitySet="Databases">
+                <ScalarProperty Name="DatabaseID" ColumnName="DatabaseID" />
+                <ScalarProperty Name="DatabaseName" ColumnName="DatabaseName" />
+                <ScalarProperty Name="ServerID" ColumnName="ServerID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Servers">
+            <EntityTypeMapping TypeName="DataElasticityModel.Server">
+              <MappingFragment StoreEntitySet="Servers">
+                <ScalarProperty Name="ServerID" ColumnName="ServerID" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="ServerName" ColumnName="ServerName" />
+                <ScalarProperty Name="MaxShardsAllowed" ColumnName="MaxShardsAllowed" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Settings">
+            <EntityTypeMapping TypeName="DataElasticityModel.Setting">
+              <MappingFragment StoreEntitySet="Settings">
+                <ScalarProperty Name="Version" ColumnName="Version" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="ShardPrefix" ColumnName="ShardPrefix" />
+                <ScalarProperty Name="AdminUserName" ColumnName="AdminUserName" />
+                <ScalarProperty Name="AdminUserPassword" ColumnName="AdminUserPassword" />
+                <ScalarProperty Name="ShardUserName" ColumnName="ShardUserName" />
+                <ScalarProperty Name="ShardUserPassword" ColumnName="ShardUserPassword" />
+                </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ShardMaps">
+            <EntityTypeMapping TypeName="DataElasticityModel.ShardMap">
+              <MappingFragment StoreEntitySet="ShardMaps">
+                <ScalarProperty Name="ShardMapID" ColumnName="ShardMapID" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ShardSetConfigs">
+            <EntityTypeMapping TypeName="DataElasticityModel.ShardSetConfig">
+              <MappingFragment StoreEntitySet="ShardSetConfigs">
+                <ScalarProperty Name="ShardSetConfigID" ColumnName="ShardSetConfigID" />
+                <ScalarProperty Name="ShardSetID" ColumnName="ShardSetID" />
+                <ScalarProperty Name="Version" ColumnName="Version" />
+                <ScalarProperty Name="TargetShardCount" ColumnName="TargetShardCount" />
+                <ScalarProperty Name="MaxShardCount" ColumnName="MaxShardCount" />
+                <ScalarProperty Name="MaxShardletsPerShard" ColumnName="MaxShardletsPerShard" />
+                <ScalarProperty Name="MinShardSizeMB" ColumnName="MinShardSizeMB" />
+                <ScalarProperty Name="MaxShardSizeMB" ColumnName="MaxShardSizeMB" />
+                <ScalarProperty Name="AllowDeployment" ColumnName="AllowDeployment" />
+                <ScalarProperty Name="ShardMapID" ColumnName="ShardMapID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ShardSetConfigSettings">
+            <EntityTypeMapping TypeName="DataElasticityModel.ShardSetConfigSetting">
+              <MappingFragment StoreEntitySet="ShardSetConfigSettings">
+                <ScalarProperty Name="ShardSetConfigSettingID" ColumnName="ShardSetConfigSettingID" />
+                <ScalarProperty Name="ShardSetConfigID" ColumnName="ShardSetConfigID" />
+                <ScalarProperty Name="SettingKey" ColumnName="SettingKey" />
+                <ScalarProperty Name="SettingValue" ColumnName="SettingValue" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ShardSets">
+            <EntityTypeMapping TypeName="DataElasticityModel.ShardSet">
+              <MappingFragment StoreEntitySet="ShardSets">
+                <ScalarProperty Name="ShardSetID" ColumnName="ShardSetID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="CurrentShardMapID" ColumnName="CurrentShardMapID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="ServerToShardSets" TypeName="DataElasticityModel.ServerToShardSets" StoreEntitySet="ServerToShardSets">
+            <EndProperty Name="Servers">
+              <ScalarProperty Name="ServerID" ColumnName="ServerID" />
+            </EndProperty>
+            <EndProperty Name="ShardSets">
+              <ScalarProperty Name="ShardSetID" ColumnName="ShardSetID" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <EntitySetMapping Name="RangeShards">
+            <EntityTypeMapping TypeName="DataElasticityModel.RangeShard">
+              <MappingFragment StoreEntitySet="RangeShards">
+                <ScalarProperty Name="RangeHighValue" ColumnName="RangeHighValue" />
+                <ScalarProperty Name="RangeLowValue" ColumnName="RangeLowValue" />
+                <ScalarProperty Name="DatabaseID" ColumnName="DatabaseID" />
+                <ScalarProperty Name="ShardMapID" ColumnName="ShardMapID" />
+                <ScalarProperty Name="ShardID" ColumnName="ShardID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Shards">
+            <EntityTypeMapping TypeName="DataElasticityModel.Shard">
+              <MappingFragment StoreEntitySet="Shards">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="DatabaseID" ColumnName="DatabaseID" />
+                <ScalarProperty Name="ShardSetID" ColumnName="ShardSetID" />
+                <ScalarProperty Name="ShardID" ColumnName="ShardID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="DefaultDatabaseSchema" Value="DataElasticity" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

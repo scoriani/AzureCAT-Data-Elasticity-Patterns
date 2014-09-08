@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<configuration>
+
+  <connectionStrings>
+    <add name="AzureStorage" connectionString="UseDevelopmentStorage=true" />
+    <!--<add name="AzureStorage" connectionString="DefaultEndpointsProtocol=http;AccountName=mystorage;AccountKey=mystoragekey" />-->
+  </connectionStrings>
+
+  <appSettings>
+    <!-- Set to true to enable Azure Caching.  Leave false for local testing -->
+    <add key="ShouldUseAzureCache" value="false" />
+  </appSettings>
+
+  <unity xmlns="http://schemas.microsoft.com/practices/2010/unity">
+    <typeAliases>
+      <typeAlias alias="AzureShardSetActionQueue" type="Microsoft.AzureCat.Patterns.DataElasticity.AzureTableStore.AzureShardSetActionQueue, Microsoft.AzureCat.Patterns.DataElasticity.AzureTableStore" />
+      <typeAlias alias="AzureShardSetConnectionDriver" type="Microsoft.AzureCat.Patterns.DataElasticity.AzureTableStore.AzureShardSetConnectionDriver, Microsoft.AzureCat.Patterns.DataElasticity.AzureTableStore" />
+    </typeAliases>
+    <container>
+      <register type="IShardSetActionQueue" mapTo="AzureShardSetActionQueue" />
+      <!--One Registration per Shard Set -->
+      <register type="IShardSetConnectionDriver" mapTo="AzureShardSetConnectionDriver" name="[MyShardSetName]" />
+    </container>
+  </unity>
+
+</configuration>

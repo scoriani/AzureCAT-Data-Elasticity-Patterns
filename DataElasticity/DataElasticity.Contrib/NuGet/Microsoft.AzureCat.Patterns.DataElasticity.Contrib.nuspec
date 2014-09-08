@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+
+<package>
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <language>en-US</language>
+    <licenseUrl>http://opensource.org/licenses/ms-pl</licenseUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <!--<projectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</projectUrl>-->
+    <iconUrl>http://go.microsoft.com/fwlink/?LinkID=386613</iconUrl>
+    <description>$description$</description>
+    <!--<releaseNotes>Summary of changes made in this release of the package.</releaseNotes>-->
+    <copyright>Copyright Microsoft 2014</copyright>
+    <tags>Azure Sharding Elasticity SQL Cloud</tags>
+    <dependencies>
+      <dependency id="Common.Logging.Core" version="2.2" />
+      <dependency id="Microsoft.AzureCat.Patterns.DataElasticity" version="1.0" />
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System" targetFramework="net45" />
+      <frameworkAssembly assemblyName="System.Core" targetFramework="net45" />
+      <frameworkAssembly assemblyName="System.Data" targetFramework="net45" />
+      <frameworkAssembly assemblyName="System.Xml" targetFramework="net45" />
+    </frameworkAssemblies>
+  </metadata>
+  <files>
+    <file src="bin\debug\Microsoft.AzureCat.Patterns.DataElasticity.Contrib.dll" target="lib\net45" />
+    <file src="bin\debug\Microsoft.AzureCat.Patterns.DataElasticity.Contrib.pdb" target="lib\net45" />
+    <file src="bin\debug\Microsoft.AzureCat.Patterns.DataElasticity.Contrib.xml" target="lib\net45" />
+  </files>
+</package>

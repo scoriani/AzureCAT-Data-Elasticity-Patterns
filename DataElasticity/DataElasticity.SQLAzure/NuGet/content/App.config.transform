@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<configuration>
+  <unity xmlns="http://schemas.microsoft.com/practices/2010/unity">
+    <typeAliases>
+      <typeAlias alias="SqlConfigRepository" type="Microsoft.AzureCat.Patterns.DataElasticity.SQLAzure.SQLConfigRepository, Microsoft.AzureCat.Patterns.DataElasticity.SQLAzure" />
+    </typeAliases>
+
+    <container>
+      <register type="ISettingsRepository" mapTo="SqlConfigRepository">
+        <lifetime type="singleton" />
+        <constructor>
+          <!-- settings connection string -->
+          <param name="connectionString">
+            <value value="Data Source=(localdb)\v11.0;Initial Catalog=ConfigDB;User ID=[AdminUserID];Password=[AdminPassword];Connection Timeout=30" />
+          </param>
+        </constructor>
+      </register>
+      <register type="IConfigRepository" mapTo="SqlConfigRepository">
+        <lifetime type="singleton" />
+        <constructor>
+          <!-- configuration repository connection string -->
+          <param name="connectionString">
+            <value value="Data Source=(localdb)\v11.0;Initial Catalog=ConfigDB;User ID=[AdminUserID];Password=[AdminPassword];Connection Timeout=30" />
+          </param>
+        </constructor>
+      </register>
+    </container>
+  </unity>
+</configuration>

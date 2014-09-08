@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="8e1ca5455525476bb1e3d40b508fecf0" Name="Diagram1">
+        <EntityTypeShape EntityType="DataElasticityModel.Database" Width="1.5" PointX="3" PointY="3.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DataElasticityModel.Server" Width="1.5" PointX="0.875" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DataElasticityModel.Setting" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DataElasticityModel.ShardMap" Width="1.5" PointX="0.5" PointY="0.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DataElasticityModel.ShardSetConfig" Width="1.5" PointX="8.25" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DataElasticityModel.ShardSetConfigSetting" Width="1.5" PointX="10.5" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DataElasticityModel.ShardSet" Width="1.5" PointX="3" PointY="6.625" IsExpanded="true" />
+        <AssociationConnector Association="DataElasticityModel.FK_Databases_ToServers" ManuallyRouted="false" />
+        <AssociationConnector Association="DataElasticityModel.FK_ShardSetConfig_ShardMap" ManuallyRouted="false" />
+        <AssociationConnector Association="DataElasticityModel.FK_ShardSetConfig_WorkloadGroup" ManuallyRouted="false" />
+        <AssociationConnector Association="DataElasticityModel.FK_ShardSetConfigSettings_WorkloadGroupConfigs" ManuallyRouted="false" />
+        <AssociationConnector Association="DataElasticityModel.ServerToShardSets" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="DataElasticityModel.RangeShard" Width="1.5" PointX="3.125" PointY="0.625" />
+        <AssociationConnector Association="DataElasticityModel.FK_Shard_Server1" />
+        <AssociationConnector Association="DataElasticityModel.FK_Shards_ShardMapID1" />
+        <EntityTypeShape EntityType="DataElasticityModel.Shard" Width="1.5" PointX="5.25" PointY="7.375" />
+        <AssociationConnector Association="DataElasticityModel.FK_Shard_Database" />
+        <AssociationConnector Association="DataElasticityModel.FK_Shard_ShardSet" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
